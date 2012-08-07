@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>callipygean - Mocha Tests</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+        <link rel="stylesheet" href="../node_modules/mocha/mocha.css" />
+
+        <script src="../node_modules/mocha/mocha.js"></script>
+        <script src="../node_modules/chai/chai.js"></script>
+        <script src="../dist/callipygean.js"></script>
+        <script src="../lib/utils.js"></script>
+        <script>
+            mocha.setup('bdd');
+            expect = chai.expect;
+            onload = function () { mocha.run(); };
+        </script>
+
+        <script src="utils.test.js"></script>
+        <script src="callipygean.test.js"></script>
+
+    </head>
+    <body>
+        <div id="mocha"></div>
+    </body>
+</html>

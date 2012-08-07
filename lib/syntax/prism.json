@@ -1,0 +1,12 @@
+{
+    "tokenClass": "token",
+    "comment": "comment",
+    "string": "string",
+    "regex": "regex",
+    "keyword" : "keyword",
+    "boolean" : "boolean",
+    "number" : "number",
+    "operator" : "operator",
+    "ignore" : null,
+    "punctuation" : "punctuation"
+}

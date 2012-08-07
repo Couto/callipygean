@@ -1,0 +1,15 @@
+{
+    "string" : "str",
+    "keyword" : "kwd",
+    "comment" : "com",
+    "type" : "typ",
+    "literal" : "lit",
+    "punctuation" : "pun",
+    "plain" : "pln",
+    "tag" : "tag",
+    "declaration" : "dec",
+    "source" : "src",
+    "attribute_name": "atn",
+    "attribute_value": "atv",
+    "nocode": "nocode"
+}
