@@ -1,20 +1,21 @@
 # callipygean
 _adj._ Having beautifully proportioned buttocks.
+
 From Ancient Greek __καλλίπυγος__ (kallipugos), from __καλλι-__ (kalli-, _beautiful_) + __πυγή__ (pugē, _buttocks_).
 
-```
-             .         .
-             |         |
-             j    :    l
-            /           \
-           /             \
-          Y       .       Y
-          |       |       |
-          l "----~Y~----" !
-           \      |      /
-            Y     |     Y
-            |     I     |
-```
+
+     .         .
+     |         |
+     j    :    l
+    /           \
+   /             \
+  Y       .       Y
+  |       |       |
+  l "----~Y~----" !
+   \      |      /
+    Y     |     Y
+    |     I     |
+
 
 JSON expandable/collapsible with compatibility with common Syntax Highlighters
 
