@@ -3,7 +3,7 @@ _adj._ Having beautifully proportioned buttocks.
 
 From Ancient Greek __καλλίπυγος__ (kallipugos), from __καλλι-__ (kalli-, _beautiful_) + __πυγή__ (pugē, _buttocks_).
 
-
+```
      .         .
      |         |
      j    :    l
@@ -15,7 +15,7 @@ From Ancient Greek __καλλίπυγος__ (kallipugos), from __καλλι-__ (
    \      |      /
     Y     |     Y
     |     I     |
-
+```
 
 JSON expandable/collapsible with compatibility with common Syntax Highlighters
 
