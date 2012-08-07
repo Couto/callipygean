@@ -301,14 +301,18 @@ var _ = {
                         type = context.type(obj[k]);
 
                         if (_.is.object(obj[k])) {
+
                             ulsec = _.$$('ul', {'class': mainClass + ' expandable object'});
                             walk(obj[k], ulsec, context);
                             li.appendChild(ulsec);
+
                         } else {
+
                             li.appendChild(_.$$('span', {
                                 'html': k,
-                                'class': mainClass + ' string'
+                                'class': mainClass + ' string attr'
                             }));
+
                             li.appendChild(_.$$('span', {
                                 'html': obj[k],
                                 'class': mainClass + ' ' + type
@@ -340,11 +344,16 @@ var _ = {
         },
 
         type: function (val) {
-            var type = typeof val;
+            var type = (typeof val);
 
             if (type === 'object') {
+
                 if (_.is.array(val)) {
                     return 'array';
+                }
+
+                if (_.is.regex(val)) {
+                    return 'regex';
                 }
             }
 
@@ -354,9 +363,7 @@ var _ = {
                 }
             }
 
-            if (_.is.regex(val)) {
-                return 'regex';
-            }
+
 
             return type;
         }

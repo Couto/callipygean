@@ -1,5 +1,5 @@
 WATCH=""
-REPORTER="spec"
+REPORTER="nyan"
 
 all: lint test min
 
