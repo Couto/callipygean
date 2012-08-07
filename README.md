@@ -72,4 +72,4 @@ _(Nothing yet)_
 
 ## License
 Copyright (c) 2012 Couto
-Licensed under the MIT license.
+Licensed under the [MIT license](http://couto.mit-license.org).

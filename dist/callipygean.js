@@ -7,17 +7,18 @@
  *
  * Copyright (c) 2012 Couto
  * Licensed under the MIT license.
+ * http://couto.mit-license.org
  */
 
 (function (exports) {
     'use strict';
 
     /**
-* _
-* Object to collect utility functions
-*
-* @type {Object}
-*/
+ * _
+ * Object to collect utility functions
+ *
+ * @type {Object}
+ */
 var _ = {
 
     /**
@@ -63,6 +64,33 @@ var _ = {
 
         return element;
     },
+    /**
+     * bind
+     *
+     * @memberOf _
+     * @static
+     *
+     * @param    {Function} fn      A function whose context is going to be bound
+     * @param    {Object}   ctx     Object that will serve as context
+     * @param    {Mixed}    [args*] Prearranged arguments
+     * @return   {Funciton}         A Function bound to the given context with the pre-arranged arguments
+     */
+    bind: (function (bind) {
+        var slice = Array.prototype.slice;
+
+        return (bind && typeof bind === 'function') ?
+                function (fn, ctx) {
+                    var args = slice.call(arguments, 2);
+                    return bind.apply(fn, [ctx].concat(args));
+                } :
+                function (fn, ctx) {
+                    var args = slice.call(arguments, 2);
+                    return function () {
+                        fn.apply(ctx, args.concat(slice.call(arguments)));
+                    };
+                };
+
+    }(Function.prototype.bind)),
 
     /**
      * _.is
@@ -324,6 +352,8 @@ var _ = {
                 }
             }(obj, ul, this));
 
+            this.bindEvents(ul);
+
 
             return ul;
 
@@ -366,6 +396,20 @@ var _ = {
 
 
             return type;
+        },
+
+        bindEvents: function (el) {
+            el.addEventListener('click', this._clickHandler);
+        },
+
+        unbindEvents: function (el) {
+            el.removeEventListener('click', this._clickHandler);
+        },
+
+        _clickHandler: function (evt) {
+            if (evt.currentTarget.getAttribute('class').indexOf('expandable') !== -1) {
+                this.expand(evt.currentTarget);
+            }
         }
 
     };

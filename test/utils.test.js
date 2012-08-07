@@ -84,6 +84,25 @@ describe('Utils - Test Suite', function () {
         }
     });
 
+    describe('bind', function () {
+        it('should return a function', function () {
+            expect(_.bind(function () {}, this)).to.be.a('function');
+        });
+
+        it('should have the right ctx and arguments', function () {
+            var bait = function () {
+                return {
+                    context: this,
+                    'arguments': arguments
+                };
+            },
+                testee = _.bind(bait, {'a': 'b'}, 'c', 'd');
+
+            expect(testee().context).to.deep.equal({'a': 'b'});
+            expect(testee(1, 2, 3)['arguments']).to.deep.equal(['c', 'd', 1, 2, 3]);
+        });
+    });
+
     describe('is', function () {
 
         describe('Object', function () {
