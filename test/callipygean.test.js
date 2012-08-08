@@ -78,13 +78,22 @@ if (typeof module !== 'undefined' && module.exports) {
     mocha.setup('tdd');
 
     suite('Functioning', function () {
-        var col = callipygean({
-                syntax: 'PrismJS',
-                collapsed: true
-            }),
+        var col,
             basic = JSON.parse(fixture('_fixtures/basic.json')),
             obj = JSON.parse(fixture('_fixtures/object.json')),
             mixed = JSON.parse(fixture('_fixtures/mixed.json'));
+
+        beforeEach(function () {
+            col = callipygean({
+                syntax: 'PrismJS',
+                collapsed: true
+            });
+        });
+
+        afterEach(function () {
+            col.dealloc();
+        });
+
 
         test('should return an DOM Element', function () {
             var result = col.convert({'a': 'b'});
@@ -158,6 +167,30 @@ if (typeof module !== 'undefined' && module.exports) {
             expect(result.childNodes[2].childNodes[1].getAttribute('class')).to.contain('string');
             expect(result.childNodes[3].childNodes[1].getAttribute('class')).to.contain('number');
             expect(result.childNodes[4].childNodes[1].getAttribute('class')).to.contain('regex');
+        });
+
+        test('if it was defined as collapsed, object must be closed', function () {
+            var i = col.collapsableCollection.length - 1;
+
+            expect(col.collapsed).to.be.ok;
+
+            for (i; i >= 0; i -= 1) {
+                expect(col.collapsableCollection[i].isOpen).to.be.falsy;
+            }
+
+        });
+
+        test('if the sub-list is closed and is clicked, it must open', function (walk) {
+            var result = col.convert(obj);
+
+            result.childNodes[0].childNodes[0].addEventListener('opened', function () {
+                expect(col.collapsableCollection[0].isOpen).to.be.ok;
+                walk();
+            });
+
+            expect(col.collapsableCollection[0].isOpen).to.be.falsy;
+            result.childNodes[0].childNodes[0].click();
+
         });
 
     });

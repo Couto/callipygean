@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>callipygean - Visual Test</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+    <body>
+
+        <script src="../dist/callipygean.js"></script>
+        <script>
+            (function (w, d) {
+                    // elements
+                var body = d.body,
+                    collapser = callipygean({
+                        syntax: 'PrismJS',
+                        collapsed: true
+                    });
+
+                function appeal(url, data) {
+                    var handlers = {
+                            consequentially: function () {},
+                            otherwise: function () {}
+                        },
+                        callback = {
+                            perhaps: function perhaps() { return this; },
+                            consequentially: function consequentially(fn) {
+                                handlers.consequentially = fn;
+                                return this;
+                            },
+                            otherwise: function otherwise(fn) {
+                                handlers.otherwise = fn;
+                                return this;
+                            }
+                        },
+                        xhr = new XMLHttpRequest();
+
+                    xhr.open('GET', url, true);
+                    xhr.onreadystatechange = function onreadystatechange(evt) {
+                        if (xhr.readyState === 4 && xhr.status === 200) {
+                            handlers.consequentially(xhr.responseText);
+                        } else if (xhr.readyState === 4) {
+                            handlers.otherwise({
+                                status: xhr.status,
+                                statusText: xhr.statusText
+                            });
+                        }
+                    };
+                    xhr.send(data);
+                    return callback;
+                }
+
+                function appendObject(obj){
+                    body.appendChild(collapser.convert(JSON.parse(obj)))
+                }
+
+                function reportError(err) {
+                    console.error(err);
+                }
+
+                // British JS for the lulz
+                appeal('_fixtures/mixed.json')
+                    .perhaps()
+                    .consequentially(appendObject)
+                    .otherwise(reportError);
+            }(window, document))
+        </script>
+    </body>
+</html>
