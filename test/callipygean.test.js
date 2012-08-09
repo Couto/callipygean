@@ -156,13 +156,13 @@ if (typeof module !== 'undefined' && module.exports) {
 
         test('if the object contains another object, a new sub-list has to be created', function () {
             var result = col.convert(obj);
-            expect(result.childNodes[0].childNodes[0]).to.be.instanceOf(HTMLUListElement);
+            expect(result.childNodes[0].childNodes[1]).to.be.instanceOf(HTMLUListElement);
         });
 
         test('value must have a class equal it\'s type', function () {
             var result = col.convert(mixed);
 
-            expect(result.childNodes[0].childNodes[0].getAttribute('class')).to.contain('object');
+            expect(result.childNodes[0].childNodes[1].getAttribute('class')).to.contain('object');
             expect(result.childNodes[1].childNodes[1].getAttribute('class')).to.contain('array');
             expect(result.childNodes[2].childNodes[1].getAttribute('class')).to.contain('string');
             expect(result.childNodes[3].childNodes[1].getAttribute('class')).to.contain('number');

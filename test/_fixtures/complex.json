@@ -1,0 +1,56 @@
+{
+  "status": 0,
+  "version": "0.2",
+  "total_time": 67.23,
+  "timestamp": 1344519236.1734,
+  "traces": [
+    {
+      "timestamp": 1344519236.1791,
+      "elapsed": 5.77,
+      "file": "MegaboxAggregatorFactory.php",
+      "line": "26",
+      "function": "create",
+      "class": "Megamedia\\Megabox\\ModelBundle\\Library\\MegaboxAggregator\\MegaboxAggregatorFactory",
+      "content": [
+        "caching_mode",
+        3
+      ]
+    },
+    {
+      "timestamp": 1344519236.2072,
+      "elapsed": 33.82,
+      "file": "StatusHandler.php",
+      "line": "74",
+      "function": "onEarlyRequest",
+      "class": "Megamedia\\Megabox\\APIBundle\\Library\\Maintenance\\StatusHandler",
+      "content": [
+        "AUTO application status => active"
+      ]
+    },
+    {
+      "timestamp": 1344519236.2094,
+      "elapsed": 36.04,
+      "file": "StatusHandler.php",
+      "line": "79",
+      "function": "onEarlyRequest",
+      "class": "Megamedia\\Megabox\\APIBundle\\Library\\Maintenance\\StatusHandler",
+      "content": [
+        "application status => active"
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "timestamp": 1344519236.2405,
+      "code": 4,
+      "message": "Invalid parameter provided",
+      "level": 4
+    },
+    {
+      "timestamp": 1344519236.2406,
+      "code": 4,
+      "message": "Invalid parameter provided",
+      "level": 1
+    }
+  ]
+}

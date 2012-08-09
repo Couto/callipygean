@@ -51,7 +51,7 @@ var _ = {
         var element = document.createElement(el),
             k;
 
-        if (attr && attr.html) {
+        if (attr && attr.hasOwnProperty('html')) {
             element.innerHTML = attr.html;
             delete attr.html;
         }
@@ -336,7 +336,8 @@ Collapsable.prototype = {
      * @public
      * @chainable
      */
-    toggle: function () {
+    toggle: function (evt) {
+        if (evt) { evt.stopPropagation(); }
 
         return (this.isOpen) ?
                 this.close() :
@@ -351,7 +352,7 @@ Collapsable.prototype = {
      * @chainable
      */
     addClass: function () {
-        if (!this.hasClass('opened')){
+        if (!this.hasClass('opened')) {
             var className = this.el.getAttribute('class');
             this.el.setAttribute('class', className + ' opened');
         }
@@ -368,8 +369,9 @@ Collapsable.prototype = {
      */
     removeClass: function () {
         var className = this.el.getAttribute('class');
-        className.replace('opened', '');
-        this.el.setAttribute('class', className);
+
+        this.el.setAttribute('class', className.replace(/\sopened/g, ''));
+
         return this;
     },
 
@@ -468,37 +470,48 @@ Collapsable.prototype = {
             }
 
             ul = _.$$('ul', {
-                'class' : mainClass + ' expandable object'
+                'class' : mainClass + ' callipygean object'
             });
 
-            (function walk(obj, placeholder, context){
-                var k, li, ulsec, type, collapsable;
+            (function walk(obj, placeholder, context, parent){
+                var k, li, lisec, ulsec, type, collapsable;
 
                 for (k in obj) {
                     if (obj.hasOwnProperty(k)) {
-                        li = _.$$('li');
+
                         type = context.type(obj[k]);
 
-                        if (_.is.object(obj[k])) {
+                        if (_.is.object(obj[k]) || _.is.array(obj[k])) {
+                            li = _.$$('li', {'class': 'expandable ' + type});
+                            ulsec = _.$$('ul', {'class': mainClass});
 
-                            ulsec = _.$$('ul', {'class': mainClass + ' expandable object'});
-                            walk(obj[k], ulsec, context);
-                            li.appendChild(ulsec);
 
-                            collapsable = new Collapsable(ulsec);
-                            (context.collapsed) ? collapsable.close() : collapsable.open();
-                            context.collapsableCollection.push(collapsable);
-
-                        } else {
 
                             li.appendChild(_.$$('span', {
-                                'html': k,
-                                'class': mainClass + ' string attr'
+                                'html': (parent && parent === 'array') ? '' : k,
+                                'class': mainClass + ' key ' + type
+                            }));
+
+                            li.appendChild(ulsec);
+
+                            collapsable = new Collapsable(li);
+                            (context.collapsed) ? collapsable.close() : collapsable.open();
+
+                            context.collapsableCollection.push(collapsable);
+                            console.log(k, parent, type);
+                            walk(obj[k], ulsec, context, type);
+                        } else {
+
+                            li = _.$$('li');
+
+                            li.appendChild(_.$$('span', {
+                                'html':  (parent && parent === 'array') ? '' : k,
+                                'class': mainClass + ' key' + ((parent && parent === 'array') ? 'hide ' : '')
                             }));
 
                             li.appendChild(_.$$('span', {
                                 'html': obj[k],
-                                'class': mainClass + ' ' + type
+                                'class': mainClass + ' value ' + type
                             }));
                         }
 
@@ -510,6 +523,9 @@ Collapsable.prototype = {
             return ul;
 
         },
+
+        buildObject: function () {},
+        buildArray: function () {},
 
         /**
          * Converts an object to a DOM Element in an asynchronous way

@@ -1,0 +1,83 @@
+.callipygean {
+    font-family: 'menlo';
+    font-size: 11px;
+    color: #333;
+}
+
+.callipygean ul,
+.callipygean li {
+    list-style: none;
+}
+
+.callipygean .expandable.array > ul,
+.callipygean .expandable.object > ul {
+    display: none;
+}
+
+.callipygean .expandable.opened > ul {
+    display: block;
+}
+
+.callipygean .expandable > .key:before {
+    content: '▸'
+}
+
+.callipygean .opened > .key:before {
+    content: '▾'
+}
+
+.callipygean .key:after {
+    content: ': '
+}
+
+.callipygean .key.hide:after {
+    content: '';
+}
+
+.callipygean .array > .key:after  {
+    content: ': []';
+}
+
+.callipygean .array.opened > .key:after  {
+    content: ': [';
+}
+
+.callipygean .array.opened > ul:after  {
+    content: '],';
+}
+
+.callipygean .array.opened > ul:last-child:after  {
+    content: ']';
+}
+
+
+.callipygean .object > .key:after  {
+    content: ': {}';
+}
+
+.callipygean .object.opened > .key:after  {
+    content: ': {';
+}
+
+.callipygean .object.opened > ul:after  {
+    content: '},';
+}
+
+.callipygean .object.opened > ul:last-child:after  {
+    content: '}';
+}
+
+.callipygean .value:after {
+    content: ',';
+}
+
+.callipygean ul:last-child:after {
+    content: '';
+}
+
+.callipygean .string:before {
+    content: "\"";
+}
+.callipygean .string:after {
+    content: "\"";
+}
