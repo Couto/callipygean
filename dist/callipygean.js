@@ -108,7 +108,7 @@ var _ = {
 
         for (k in obj) {
             if (obj.hasOwnProperty(k)) {
-                if (async) { setTimeout(fn.call(context, k, obj[k], obj), 0); }
+                if (async) { setTimeout(this.bind(fn, context, k, obj[k], obj), 0); }
                 else { fn.call(context, k, obj[k], obj); }
             }
         }
@@ -497,12 +497,11 @@ Collapsable.prototype = {
          * @return   {Element}        DOM element
         */
         convert: function (obj, cb) {
-            var ul = _.$$('ul', { 'class' : 'callipygean' }),
+            var obj = (_.is.string(obj)) ? JSON.parse(obj) : obj,
+                ul = _.$$('ul', { 'class' : 'callipygean' }),
                 counter = _.keys(obj).length,
                 async = (cb && _.is.fun(cb)) ? true : false,
                 child;
-
-            if (_.is.string(obj)) { obj = JSON.parse(obj); }
 
             _.forOwn(obj, function (key, val, obj) {
                 counter -= 1;

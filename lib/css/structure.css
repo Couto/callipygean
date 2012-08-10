@@ -10,7 +10,7 @@
 }
 
 .callipygean .expandable {
-
+    cursor: pointer;
 }
 
 .callipygean .expandable.array::before,
