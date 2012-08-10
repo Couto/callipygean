@@ -92,6 +92,42 @@ var _ = {
 
     }(Function.prototype.bind)),
 
+    keys : function (obj) {
+        var k, keys = [];
+        for (k in obj) {
+            if (obj.hasOwnProperty(k)) {
+                keys.push(k);
+            }
+        }
+        return keys;
+    },
+
+    forOwn : function (obj, fn, ctx, async) {
+        var k,
+            context = ctx || this;
+
+        for (k in obj) {
+            if (obj.hasOwnProperty(k)) {
+                if (async) { setTimeout(fn.call(context, k, obj[k], obj), 0); }
+                else { fn.call(context, k, obj[k], obj); }
+            }
+        }
+
+        return obj;
+    },
+
+    forEach: function (arr, fn, ctx) {
+        var i = 0,
+            len = arr.length,
+            context = ctx || this;
+
+        for (i; i < len; i += 1) {
+            fn.call(context, arr[i], i, arr);
+        }
+
+        return arr;
+    },
+
     /**
      * _.is
      * collection of validators
@@ -376,7 +412,8 @@ Collapsable.prototype = {
     },
 
     hasClass: function (className) {
-        return (this.el.getAttribute('class').indexOf(className) !== -1);
+        return (this.el.getAttribute('class') &&
+                this.el.getAttribute('class').indexOf(className) !== -1);
     },
     /**
      * bindEvents
@@ -458,74 +495,169 @@ Collapsable.prototype = {
          * @param    {Object}    obj  JSON Object
          * @param    {Function}  [cb] function to be called as callback
          * @return   {Element}        DOM element
-         */
+        */
         convert: function (obj, cb) {
-            var ul, li, k,
-                mainClass = this.syntax.tokenClass;
+            var ul = _.$$('ul', { 'class' : 'callipygean' }),
+                counter = _.keys(obj).length,
+                async = (cb && _.is.fun(cb)) ? true : false,
+                child;
 
-            // if there's a function in the arguments
-            // then it should call the asynchronous version
-            if (cb && _.is.fun(cb)) {
-                return this.convertAsync(obj, cb);
-            }
+            if (_.is.string(obj)) { obj = JSON.parse(obj); }
 
-            ul = _.$$('ul', {
-                'class' : mainClass + ' callipygean object'
-            });
+            _.forOwn(obj, function (key, val, obj) {
+                counter -= 1;
+                child = _.$$('li');
 
-            (function walk(obj, placeholder, context, parent){
-                var k, li, lisec, ulsec, type, collapsable;
+                child.appendChild(this.buildKey(key));
 
-                for (k in obj) {
-                    if (obj.hasOwnProperty(k)) {
+                if (_.is.object(val)) {
+                    child.appendChild(_.$$('span', {
+                        'class' : this.syntax.tokenClass + ' punctuation',
+                        'html' : '{'
+                    }));
+                    child.appendChild(this.buildObject(val));
+                    child.appendChild(_.$$('span', {
+                        'class' : this.syntax.tokenClass + ' punctuation',
+                        'html' : '}'
+                    }));
+                    child.setAttribute('class', 'expandable object');
+                    this.collapsableCollection.push(new Collapsable(child));
+                } else if (_.is.array(val)) {
+                    child.appendChild(_.$$('span', {
+                        'class' : this.syntax.tokenClass + ' punctuation',
+                        'html' : '['
+                    }));
+                    child.appendChild(this.buildArray(val));
+                    child.appendChild(_.$$('span', {
+                        'class' : this.syntax.tokenClass + ' punctuation',
+                        'html' : ']'
+                    }));
+                    child.setAttribute('class', 'expandable array');
+                    this.collapsableCollection.push(new Collapsable(child));
+                } else { child.appendChild(this.buildStandard(val)); }
 
-                        type = context.type(obj[k]);
-
-                        if (_.is.object(obj[k]) || _.is.array(obj[k])) {
-                            li = _.$$('li', {'class': 'expandable ' + type});
-                            ulsec = _.$$('ul', {'class': mainClass});
-
-
-
-                            li.appendChild(_.$$('span', {
-                                'html': (parent && parent === 'array') ? '' : k,
-                                'class': mainClass + ' key ' + type
-                            }));
-
-                            li.appendChild(ulsec);
-
-                            collapsable = new Collapsable(li);
-                            (context.collapsed) ? collapsable.close() : collapsable.open();
-
-                            context.collapsableCollection.push(collapsable);
-                            console.log(k, parent, type);
-                            walk(obj[k], ulsec, context, type);
-                        } else {
-
-                            li = _.$$('li');
-
-                            li.appendChild(_.$$('span', {
-                                'html':  (parent && parent === 'array') ? '' : k,
-                                'class': mainClass + ' key' + ((parent && parent === 'array') ? 'hide ' : '')
-                            }));
-
-                            li.appendChild(_.$$('span', {
-                                'html': obj[k],
-                                'class': mainClass + ' value ' + type
-                            }));
-                        }
-
-                        placeholder.appendChild(li);
-                    }
+                if (counter) {
+                    child.appendChild(_.$$('span', {
+                        'class': this.syntax.tokenClass + ' punctuation', html: ','
+                    }));
                 }
-            }(obj, ul, this));
 
-            return ul;
+                ul.appendChild(child);
 
+                if (async && counter === 0) { cb(ul); }
+
+            }, this, async);
+
+            return (async) ? this : ul;
         },
 
-        buildObject: function () {},
-        buildArray: function () {},
+        buildObject: function (obj) {
+            var ul = _.$$('ul', {'class': 'object'}),
+                counter = _.keys(obj).length,
+                child,
+                keyEl;
+
+            _.forOwn(obj, function (key, val, obj) {
+                counter -= 1;
+
+                child = _.$$('li');
+                keyEl = this.buildKey(key);
+                child.appendChild(keyEl);
+
+                if (_.is.array(val)) {
+                    child.appendChild(_.$$('span', {
+                        'class' : this.syntax.tokenClass + ' punctuation',
+                        'html' : '['
+                    }));
+                    child.appendChild(this.buildArray(val));
+                    child.appendChild(_.$$('span', {
+                        'class' : this.syntax.tokenClass + ' punctuation',
+                        'html' : ']'
+                    }));
+                    child.setAttribute('class', 'expandable array');
+                    this.collapsableCollection.push(new Collapsable(child));
+
+                } else if (_.is.object(val)) {
+
+                    child.appendChild(_.$$('span', {
+                        'class' : this.syntax.tokenClass + ' punctuation',
+                        'html' : '{'
+                    }));
+                    child.appendChild(this.buildObject(val));
+                    child.appendChild(_.$$('span', {
+                        'class' : this.syntax.tokenClass + ' punctuation',
+                        'html' : '{'
+                    }));
+                    child.setAttribute('class', 'expandable object');
+                    this.collapsableCollection.push(child);
+
+                } else { child.appendChild(this.buildStandard(val)); }
+
+                if (counter) {
+                    child.appendChild(_.$$('span', {
+                        'class': this.syntax.tokenClass + ' punctuation', html: ','
+                    }));
+                }
+
+                ul.appendChild(child);
+
+
+            }, this);
+
+            return ul;
+        },
+
+        buildArray: function (arr) {
+            var ul = _.$$('ul', {'class': 'array'}),
+                li,
+                counter = arr.length;
+
+            _.forEach(arr, function (val, idx, arr) {
+                counter -= 1;
+
+                li = _.$$('li');
+                if (_.is.object(val)) {
+                    li.appendChild(_.$$('span', {
+                        'class' : this.syntax.tokenClass + ' punctuation',
+                        'html' : '{'
+                    }));
+                    li.appendChild(this.buildObject(val));
+                    li.appendChild(_.$$('span', {
+                        'class' : this.syntax.tokenClass + ' punctuation',
+                        'html' : '}'
+                    }));
+                    li.setAttribute('class', 'expandable object');
+                } else if (_.is.array(val)) { li = this.buildArray(val); }
+                else { li = this.buildStandard(val, 'li'); }
+
+                if (counter) {
+                    li.appendChild(_.$$('span', {'class': this.syntax.tokenClass + ' punctuation', html: ','}));
+                }
+
+
+                ul.appendChild(li);
+                this.collapsableCollection.push(new Collapsable(li));
+            }, this);
+
+
+            return ul;
+        },
+
+        buildKey: function (key) {
+            return _.$$('span', {
+                'class' : 'key ' + this.syntax.tokenClass + ' string',
+                'html' : '"' + key + '":'
+            });
+        },
+
+        buildStandard: function (data, el) {
+            var type = this.type(data);
+            console.log(data, type);
+            return _.$$(el || 'span', {
+                'class': this.syntax.tokenClass + ' value ' + type,
+                'html' : (type === 'string') ? '"' + data + '"' : data
+            });
+        },
 
         /**
          * Converts an object to a DOM Element in an asynchronous way

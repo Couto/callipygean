@@ -4,10 +4,9 @@
         <title>callipygean - Visual Test</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link href="../lib/css/structure.css" rel="stylesheet" />
-        <link href="https://raw.github.com/LeaVerou/prism/gh-pages/prism.css" rel="stylesheet" />
+        <link href="https://raw.github.com/LeaVerou/prism/gh-pages/prism.css" rel="stylesheet" type="text/css" />
     </head>
     <body>
-
         <script src="../dist/callipygean.js"></script>
         <script>
             (function (w, d) {
@@ -52,7 +51,9 @@
                 }
 
                 function appendObject(obj){
-                    body.appendChild(collapser.convert(JSON.parse(obj)))
+                    collapser.convert(JSON.parse(obj), function (el) {
+                        d.body.appendChild(el);
+                    });
                 }
 
                 function reportError(err) {
