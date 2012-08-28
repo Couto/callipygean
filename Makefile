@@ -25,10 +25,10 @@ jpp:
 	@./build/jpp.js lib/callipygean.js
 
 server:
-	@python -m SimpleHTTPServer &
+	@./node_modules/.bin/serve &
 
 server-stop:
-	@ps | grep "python -m" | egrep -o -e "^[0-9]+" | xargs kill
+	@kill $$(ps -ef | grep "node ./node_modules/.bin/serve" | grep -v grep | awk '{print $$2}')
 
 min: clean
 	@mkdir dist && touch dist/callipygean.min.js
