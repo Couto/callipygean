@@ -79,9 +79,9 @@ if (typeof module !== 'undefined' && module.exports) {
 
     suite('Functioning', function () {
         var col,
-            basic = JSON.parse(fixture('_fixtures/basic.json')),
-            obj = JSON.parse(fixture('_fixtures/object.json')),
-            mixed = JSON.parse(fixture('_fixtures/mixed.json'));
+            basic = JSON.parse(fixture('_fixtures/json/basic.json')),
+            obj = JSON.parse(fixture('_fixtures/json/object.json')),
+            mixed = JSON.parse(fixture('_fixtures/json/mixed.json'));
 
         beforeEach(function () {
             col = callipygean({

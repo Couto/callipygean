@@ -22,13 +22,7 @@ clean:
 	@rm -r dist
 
 jpp:
-	@./build/jpp.js lib/callipygean.js | ./node_modules/.bin/uglifyjs \
-		--beautify \
-		--indent 4 \
-		--no-mangle \
-		--no-mangle-functions \
-		--no-seqs
-
+	@./build/jpp.js lib/callipygean.js | ./node_modules/.bin/js-beautify --jslint-happy - 
 server:
 	@if [[ $$(ps -ef | grep "node ./node_modules/.bin/serve" | grep -v grep | awk '{print $$2}') -gt 0 ]]; then \$(MAKE) server-stop; fi
 	@./node_modules/.bin/serve > /dev/null &
