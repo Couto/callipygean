@@ -4,7 +4,7 @@ REPORTER="nyan"
 all: lint test min
 
 lint:
-	@./node_modules/.bin/jslint dist/callipygean.js
+	@./node_modules/.bin/jshint dist/callipygean.js
 
 test: min
 	@zsh -c "./node_modules/.bin/mocha -u bdd $(WATCH) --reporter $(REPORTER) ./test/**/*.test.js"
@@ -12,8 +12,8 @@ test: min
 test-b:
 	@$(min)
 	@$(MAKE) lint
-	@$(MAKE) server &
-	@open 'http://localhost:8000/test'
+	@$(MAKE) server
+	@open 'http://localhost:3000/test'
 
 watch:
 	$(MAKE) test WATCH="-w" REPORTER="min"
@@ -22,9 +22,15 @@ clean:
 	@rm -r dist
 
 jpp:
-	@./build/jpp.js lib/callipygean.js
+	@./build/jpp.js lib/callipygean.js | ./node_modules/.bin/uglifyjs \
+		--beautify \
+		--indent 4 \
+		--no-mangle \
+		--no-mangle-functions \
+		--no-seqs
 
 server:
+	@if [[ $$(ps -ef | grep "node ./node_modules/.bin/serve" | grep -v grep | awk '{print $$2}') -gt 0 ]]; then \$(MAKE) server-stop; fi
 	@./node_modules/.bin/serve &
 
 server-stop:
@@ -32,7 +38,8 @@ server-stop:
 
 min: clean
 	@mkdir dist && touch dist/callipygean.min.js
-	@./build/jpp.js lib/callipygean.js dist/callipygean.js | xargs ./node_modules/.bin/uglifyjs \
+	@$(MAKE) jpp > dist/callipygean.js
+	@cat dist/callipygean.js | ./node_modules/.bin/uglifyjs \
 		--output dist/callipygean.min.js \
 		--mangle-toplevel \
 		--no-dead-code \

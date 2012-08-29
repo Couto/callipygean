@@ -31,6 +31,6 @@ return (!output) ?
     process.stdout.write(merged) :
     (function () {
         fs.writeFileSync(output, merged, 'utf8');
-        process.stdout.write(output);
+        process.stdout.write(merged)
         process.exit();
     }());

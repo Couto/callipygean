@@ -1,41 +1,29 @@
 {
+  "author": "Couto <couto@15minuteslate.net> (http://15minuteslate.net)",
   "name": "callipygean",
   "description": "JSON expandable/collapsible with compatibility with common Syntax Highlighters",
   "version": "0.1.0",
   "homepage": "https://github.com/Couto/callipygean",
-  "author": {
-    "name": "Couto",
-    "email": "couto@15minuteslate.net",
-    "url": "http://15minuteslate.net"
-  },
   "repository": {
     "type": "git",
     "url": "git://github.com/Couto/callipygean.git"
   },
-  "bugs": {
-    "url": "https://github.com/Couto/callipygean/issues"
+  "main": "lib/callipygean.js",
+  "scripts": {
+    "start": "make server",
+    "stop": "make server-stop",
+    "test": "make test"
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "http://couto.mit-license.org"
-    }
-  ],
-  "main": "lib/callipygean",
+  "dependencies": {},
+  "devDependencies": {
+    "chai": "~1.2.0",
+    "uglify-js": "~1.3.3",
+    "mocha": "~1.4.1",
+    "serve": "~1.1.0",
+    "jshint": "~0.8.1"
+  },
+  "optionalDependencies": {},
   "engines": {
     "node": "*"
-  },
-  "scripts": {
-    "start" : "make server",
-    "stop" : "make server-stop",
-    "test": "make lint test"
-  },
-  "devDependencies": {
-    "mocha": "1.3.2",
-    "chai" : "1.1.1",
-    "jslint" : "0.1.8",
-    "uglify-js": "1.3.3",
-    "serve" : "1.1.0"
-  },
-  "keywords": []
+  }
 }
